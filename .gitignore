@@ -1,0 +1,6 @@
+bin/
+include/
+lib/
+main/fan_attack/__pycache__/
+pyvenv.cfg
+setting.json
