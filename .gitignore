@@ -5,3 +5,4 @@ main/fan_attack/src/__pycache__/
 main/fan_attack/src/ignore/
 pyvenv.cfg
 setting.json
+.DS_Store
