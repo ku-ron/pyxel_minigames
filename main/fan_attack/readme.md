@@ -4,6 +4,9 @@
 
 ## ブラウザ上での実行
 - こちらからプレイできます。[ブラウザで遊ぶ](https://kitao.github.io/pyxel/wasm/launcher/?play=ku-ron.pyxel_minigames.main.fan_attack.fan_attack)
+   - ソースから実行テスト
+      - [Launcher版](https://kitao.github.io/pyxel/wasm/launcher/?run=ku-ron.pyxel_minigames.main.fan_attack.main)
+      - [カスタムタグhtmlの読み込み](https://ku-ron.github.io/pyxel_minigames/main/fan_attack/src/fan_attack.html)
 
 ## ゲームの特徴
 
