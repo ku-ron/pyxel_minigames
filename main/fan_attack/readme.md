@@ -3,7 +3,7 @@
 このゲームは、Pyxelを使用した2Dのシューティングゲームです。プレイヤーは画面中央に位置し、マウスを使って敵に扇型の攻撃を放ちます。
 
 ## ブラウザ上での実行
-- こちらからプレイできます。
+- こちらからプレイできます。[ブラウザで遊ぶ](https://kitao.github.io/pyxel/wasm/launcher/?play=ku-ron.pyxel_minigames.main.fan_attack.fan_attack)
 
 ## ゲームの特徴
 
