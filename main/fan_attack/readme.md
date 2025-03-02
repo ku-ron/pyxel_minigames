@@ -7,9 +7,6 @@
    - ソースから実行テスト
       - [Launcher版](https://kitao.github.io/pyxel/wasm/launcher/?run=ku-ron.pyxel_minigames.main.fan_attack.main)
       - [カスタムタグhtmlの読み込み](https://ku-ron.github.io/pyxel_minigames/main/fan_attack/src/fan_attack.html)
-   - ソースから実行テスト(main.pyにimport pyxelを追加してみる)
-      - [Launcher版](https://kitao.github.io/pyxel/wasm/launcher/?run=ku-ron.pyxel_minigames.main.fan_attack.main_test)
-      - [カスタムタグhtmlの読み込み](https://ku-ron.github.io/pyxel_minigames/main/fan_attack/src/fan_attack_test.html)
 
 
 ## ゲームの特徴
