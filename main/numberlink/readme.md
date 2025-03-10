@@ -3,7 +3,7 @@
 このゲームは、Pyxelを使用したナンバーリンクというパズルゲームです。同じ数字を繋ぎます。
 
 ## ブラウザ上での実行
-- こちらからプレイできます。[ブラウザで遊ぶ](https://github.com/ku-ron/pyxel_minigames/blob/main/main/numberlink/readme.md)
+- こちらからプレイできます。[ブラウザで遊ぶ](https://kitao.github.io/pyxel/wasm/launcher/?play=ku-ron.pyxel_minigames.main.numberlink.numberlink&gamepad=enabled)
 
 ## ゲームの特徴
 - 同じ数字を繋ぎます。
