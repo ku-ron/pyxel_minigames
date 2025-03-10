@@ -8,14 +8,17 @@ class MenuScreen:
         self.selected_index = 0
     
     def update(self):
-        # 上下キーで選択変更
-        if pyxel.btnp(pyxel.KEY_UP) and self.selected_index > 0:
+        # 上下キーまたは十字キーで選択変更
+        if (pyxel.btnp(pyxel.KEY_UP) or
+            pyxel.btnp(pyxel.GAMEPAD1_BUTTON_DPAD_UP)) and self.selected_index > 0:
             self.selected_index -= 1
-        elif pyxel.btnp(pyxel.KEY_DOWN) and self.selected_index < len(self.puzzles) - 1:
+        elif (pyxel.btnp(pyxel.KEY_DOWN) or
+              pyxel.btnp(pyxel.GAMEPAD1_BUTTON_DPAD_DOWN)) and self.selected_index < len(self.puzzles) - 1:
             self.selected_index += 1
         
-        # Enterキーで選択
-        if pyxel.btnp(pyxel.KEY_RETURN):
+        # Enterキーまたはゲームパッドのボタンで選択
+        if (pyxel.btnp(pyxel.KEY_RETURN) or
+            pyxel.btnp(pyxel.GAMEPAD1_BUTTON_B)):
             selected_puzzle = self.puzzles[self.selected_index]["id"]
             self.app.start_game(selected_puzzle)
     
@@ -34,5 +37,5 @@ class MenuScreen:
         pyxel.text(20, 50 + self.selected_index * 10, ">", 8)
         
         # 操作方法
-        instruction = "UP/DOWN: Select, ENTER: Start, ESC: Quit"
+        instruction = "UP/DOWN: Select, ENTER/B: Start, ESC: Quit"
         pyxel.text(10, self.app.WINDOW_HEIGHT - 20, instruction, 5)
