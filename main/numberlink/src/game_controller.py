@@ -39,15 +39,16 @@ class NumberlinkController:
         self.handle_input()
     
     def handle_input(self):
-        # クリア表示中にENTERキーでメニューに戻る
+        # クリア表示中にENTERキーまたはBボタンでメニューに戻る
         if self.is_cleared and self.show_clear_message:
-            # if pyxel.btnp(pyxel.KEY_RETURN) or pyxel.btnp(pyxel.KEY_ENTER):
-            if pyxel.btnp(pyxel.KEY_RETURN):
+            if (pyxel.btnp(pyxel.KEY_RETURN) or 
+                pyxel.btnp(pyxel.GAMEPAD1_BUTTON_B)):
                 self.game.return_to_menu()
                 return
 
-        # モード切替 (Spaceキー)
-        if pyxel.btnp(pyxel.KEY_SPACE):
+        # モード切替 (SpaceキーまたはAボタン)
+        if (pyxel.btnp(pyxel.KEY_SPACE) or 
+            pyxel.btnp(pyxel.GAMEPAD1_BUTTON_A)):
             # 描画モードから移動モードに切り替わるとき
             if self.draw_mode:
                 # クリアチェックを行う
@@ -58,17 +59,22 @@ class NumberlinkController:
         
         # カーソル移動 - 速度を遅くするため、btnpのパラメータを調整
         # hold=10 (長押し検出まで10フレーム), period=4 (長押し中は4フレームごとに入力)
-        if pyxel.btnp(pyxel.KEY_UP, 10, 4):
+        if (pyxel.btnp(pyxel.KEY_UP, 10, 4) or 
+            pyxel.btnp(pyxel.GAMEPAD1_BUTTON_DPAD_UP, 10, 4)):
             self.try_move_cursor(0, -1)
-        elif pyxel.btnp(pyxel.KEY_DOWN, 10, 4):
+        elif (pyxel.btnp(pyxel.KEY_DOWN, 10, 4) or 
+              pyxel.btnp(pyxel.GAMEPAD1_BUTTON_DPAD_DOWN, 10, 4)):
             self.try_move_cursor(0, 1)
-        elif pyxel.btnp(pyxel.KEY_LEFT, 10, 4):
+        elif (pyxel.btnp(pyxel.KEY_LEFT, 10, 4) or 
+              pyxel.btnp(pyxel.GAMEPAD1_BUTTON_DPAD_LEFT, 10, 4)):
             self.try_move_cursor(-1, 0)
-        elif pyxel.btnp(pyxel.KEY_RIGHT, 10, 4):
+        elif (pyxel.btnp(pyxel.KEY_RIGHT, 10, 4) or 
+              pyxel.btnp(pyxel.GAMEPAD1_BUTTON_DPAD_RIGHT, 10, 4)):
             self.try_move_cursor(1, 0)
         
-        # リセット (Rキー)
-        if pyxel.btnp(pyxel.KEY_R):
+        # リセット (RキーまたはXボタン)
+        if (pyxel.btnp(pyxel.KEY_R) or 
+            pyxel.btnp(pyxel.GAMEPAD1_BUTTON_X)):
             self.initialize_game()
             self.board.paths = {}
             self.board.connected_numbers = {pos: {num} for pos, num in self.board.number_cells.items()}
@@ -80,8 +86,9 @@ class NumberlinkController:
             # クリアしていなくても常にメッセージ表示（デバッグ用）
             self.show_clear_message = True
         
-        # メニューに戻る (Mキー)
-        if pyxel.btnp(pyxel.KEY_M):
+        # メニューに戻る (MキーまたはYボタン)
+        if (pyxel.btnp(pyxel.KEY_M) or 
+            pyxel.btnp(pyxel.GAMEPAD1_BUTTON_Y)):
             self.game.return_to_menu()
     
     def check_clear_when_mode_change(self):
@@ -238,8 +245,8 @@ class NumberlinkController:
         mode_color = 8 if self.draw_mode else 12
         pyxel.text(text_x, text_y, mode_text, mode_color)
         
-        # 操作方法
-        ctrl_text = "SPACE: Toggle Mode  R: Reset  M: Menu"
+        # 操作方法 (キーボードとゲームパッド)
+        ctrl_text = "SPACE/A: Toggle Mode  R/X: Reset  M/Y: Menu"
         ctrl_x = self.game.app.WINDOW_WIDTH // 2 - len(ctrl_text) * 2
         ctrl_y = text_y + 10
         pyxel.text(ctrl_x, ctrl_y, ctrl_text, GRAY)
@@ -269,18 +276,8 @@ class NumberlinkController:
         text_y = status_y + 10  # 背景の中央あたりに配置
         pyxel.text(text_x, text_y, message, color)
         
-        # ENTERキーの案内
-        enter_text = "Press ENTER to return to menu"
+        # ENTERキーまたはBボタンの案内
+        enter_text = "Press ENTER/B to return to menu"
         enter_x = self.game.app.WINDOW_WIDTH // 2 - len(enter_text) * 2
         enter_y = text_y + 10
         pyxel.text(enter_x, enter_y, enter_text, DARK_GRAY)
-    
-    def draw_large_text(self, char, x, y, color):
-        """文字を2倍サイズで描画"""
-        # 通常サイズで描画
-        pyxel.text(x, y, char, color)
-        pyxel.text(x+1, y, char, color)  # 横方向に少しずらして太く
-        pyxel.text(x, y+1, char, color)  # 縦方向に少しずらして太く
-        pyxel.text(x+1, y+1, char, color)  # 斜めにずらして太く
-
-
