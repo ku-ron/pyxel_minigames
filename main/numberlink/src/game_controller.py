@@ -127,9 +127,44 @@ class NumberlinkController:
                 self.invalid_move_timer = 0
                 self.invalid_move_target = new_pos
                 return
+                
+            # 異なる数字同士の接続をチェック
+            if self.would_connect_different_numbers(old_pos, new_pos):
+                # 無効な移動としてアニメーション設定
+                self.invalid_move = True
+                self.invalid_move_timer = 0
+                self.invalid_move_target = new_pos
+                return
         
         # 移動実行
         self.move_cursor(dx, dy)
+    
+    def would_connect_different_numbers(self, pos1, pos2):
+        """異なる数字に関連付けられたセル/線を接続しようとしているかチェック"""
+        # 両方が数字セルの場合は常に接続不可
+        if pos1 in self.board.number_cells and pos2 in self.board.number_cells:
+            num1 = self.board.number_cells[pos1]
+            num2 = self.board.number_cells[pos2]
+            return num1 != num2
+            
+        # 数字セルと線をつなげようとする場合
+        connected_numbers1 = set()
+        connected_numbers2 = set()
+        
+        # pos1に関連する数字を取得
+        if pos1 in self.board.connected_numbers:
+            connected_numbers1 = self.board.connected_numbers[pos1]
+        
+        # pos2に関連する数字を取得
+        if pos2 in self.board.connected_numbers:
+            connected_numbers2 = self.board.connected_numbers[pos2]
+        
+        # どちらかが空（まだ何にも接続されていない）場合は接続可能
+        if not connected_numbers1 or not connected_numbers2:
+            return False
+            
+        # どちらも数字に接続されている場合、同じ数字かどうかチェック
+        return connected_numbers1 != connected_numbers2
     
     def move_cursor(self, dx, dy):
         new_row = max(0, min(self.board.GRID_SIZE - 1, self.cursor_pos[0] + dy))
