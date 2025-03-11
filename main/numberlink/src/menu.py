@@ -16,9 +16,9 @@ class MenuScreen:
               pyxel.btnp(pyxel.GAMEPAD1_BUTTON_DPAD_DOWN)) and self.selected_index < len(self.puzzles) - 1:
             self.selected_index += 1
         
-        # Enterキーまたはゲームパッドのボタンで選択
+        # Enterキーまたはゲームパッドのボタンで選択(スペースでも、ゲームパッドの他のボタンでも可)
         if (pyxel.btnp(pyxel.KEY_RETURN) or pyxel.btnp(pyxel.KEY_SPACE) or
-            pyxel.btnp(pyxel.GAMEPAD1_BUTTON_B)):
+            pyxel.btnp(pyxel.GAMEPAD1_BUTTON_B) or pyxel.btnp(pyxel.GAMEPAD1_BUTTON_A)):
             selected_puzzle = self.puzzles[self.selected_index]["id"]
             self.app.start_game(selected_puzzle)
     
