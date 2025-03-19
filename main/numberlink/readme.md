@@ -6,7 +6,7 @@
 
 
 ## ブラウザ上での実行
-- こちらからプレイできます。[ブラウザで遊ぶ](https://kitao.github.io/pyxel/wasm/launcher/?play=ku-ron.pyxel_minigames.main.numberlink.numberlink_v1_0&gamepad=enabled)
+- こちらからプレイできます。[ブラウザで遊ぶ](https://kitao.github.io/pyxel/wasm/launcher/?play=ku-ron.pyxel_minigames.main.numberlink.numberlink_v1_1&gamepad=enabled)
 
 ## ゲームのルール
 - 同じ数字のペアを線で繋ぎます。
