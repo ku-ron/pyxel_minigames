@@ -37,5 +37,7 @@ class MenuScreen:
         pyxel.text(20, 50 + self.selected_index * 10, ">", 8)
         
         # 操作方法
-        instruction = "UP/DOWN: Select, ENTER/B: Start, ESC: Quit"
-        pyxel.text(10, self.app.WINDOW_HEIGHT - 20, instruction, 5)
+        instruction1 = "UP/DOWN: Select, ENTER/B: Start, ESC: Quit"
+        instruction2 = "B: Toggle BGM ON/OFF"
+        pyxel.text(10, self.app.WINDOW_HEIGHT - 30, instruction1, 5)
+        pyxel.text(10, self.app.WINDOW_HEIGHT - 20, instruction2, 5)
