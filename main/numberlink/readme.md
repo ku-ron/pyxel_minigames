@@ -6,7 +6,7 @@
 
 
 ## ブラウザ上での実行
-- こちらからプレイできます。[ブラウザで遊ぶ](https://kitao.github.io/pyxel/wasm/launcher/?play=ku-ron.pyxel_minigames.main.numberlink.numberlink_v1_2gamepad=enabled)
+- こちらからプレイできます。[ブラウザで遊ぶ](https://kitao.github.io/pyxel/wasm/launcher/?play=ku-ron.pyxel_minigames.main.numberlink.numberlink_v1_2&gamepad=enabled)
 
 
 ## ゲームのルール
