@@ -6,7 +6,7 @@
 
 
 ## ブラウザ上での実行
-- こちらからプレイできます。[ブラウザで遊ぶ](https://kitao.github.io/pyxel/wasm/launcher/?play=ku-ron.pyxel_minigames.main.numberlink.numberlink_v1_1&gamepad=enabled)
+- こちらからプレイできます。[ブラウザで遊ぶ](https://kitao.github.io/pyxel/wasm/launcher/?play=ku-ron.pyxel_minigames.main.numberlink.numberlink_v1_2gamepad=enabled)
 
 ## ゲームのルール
 - 同じ数字のペアを線で繋ぎます。
@@ -53,5 +53,11 @@
        pyxel play numberlink_v1_0.pyxapp      
       ```
 ## 更新情報
+- ver1.2: 更新
+   - BGMが意図通りじゃなかったところを修正しました。
+   - 問題を少し増やしたので、それに合わせてメニューももっと問題数をたくさん表示できるように変更しました。
+   - 問題を読み込むプログラムを更新して、jsonで別ファイルに書かれたものも読み取れるようにしました。
+      - 手元ではエディタも作ったのですが、それはまだ調整中です。
+
 - ver1.1: BGMを付けて、BGMオンオフボタンも付けました。
    - スマホで遊び人もいるかなと思ったのでタッチでもオンオフ出来るようにしました。
