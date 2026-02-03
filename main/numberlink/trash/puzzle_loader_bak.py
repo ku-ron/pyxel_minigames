@@ -1,4 +1,4 @@
-from puzzles.puzzles import PUZZLES
+from main.numberlink.trash.puzzles import PUZZLES
 
 def get_puzzle_list():
     """利用可能なパズルのリストを返す"""

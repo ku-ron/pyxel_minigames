@@ -3,9 +3,10 @@ from utils.colors import get_color_for_number, get_path_color, BLACK, WHITE, GRA
 from utils.grid import draw_grid, is_adjacent
 
 class NumberlinkBoard:
-    def __init__(self, grid_size, number_cells, cell_size, offset_x, offset_y):
+    def __init__(self, grid_rows, grid_cols, number_cells, cell_size, offset_x, offset_y):
         # ゲーム設定
-        self.GRID_SIZE = grid_size
+        self.GRID_ROWS = grid_rows
+        self.GRID_COLS = grid_cols
         self.number_cells = number_cells
         self.CELL_SIZE = cell_size
         self.OFFSET_X = offset_x
@@ -290,7 +291,7 @@ class NumberlinkBoard:
     
     def draw(self):
         # グリッドを描画
-        draw_grid(self.OFFSET_X, self.OFFSET_Y, self.GRID_SIZE, self.CELL_SIZE)
+        draw_grid(self.OFFSET_X, self.OFFSET_Y, self.GRID_ROWS, self.GRID_COLS, self.CELL_SIZE)
         
         # パスを描画
         self.draw_paths()

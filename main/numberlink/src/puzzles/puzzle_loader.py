@@ -1,66 +1,80 @@
 import os
 import json
-from puzzles.puzzles import PUZZLES
 
-def load_custom_puzzles():
-    """カスタムパズルをロードする関数"""
-    custom_puzzles = []
-    
-    # カスタムパズルディレクトリの確認
-    if not os.path.exists("custom_puzzles"):
-        return custom_puzzles
-    
-    # ディレクトリ内のJSONファイルをロード
-    for filename in os.listdir("custom_puzzles"):
-        if filename.endswith(".json"):
-            filepath = os.path.join("custom_puzzles", filename)
-            try:
-                with open(filepath, "r") as f:
-                    puzzle_data = json.load(f)
-                
-                # 必要なフィールドの確認
-                if all(key in puzzle_data for key in ["id", "name", "size", "numbers"]):
-                    # 数字データを変換（文字列キーをタプルに）
-                    number_cells = {}
-                    for str_pos, num in puzzle_data["numbers"].items():
-                        # "(r, c)" 形式の文字列からタプルに変換
-                        try:
-                            str_pos = str_pos.strip("()").replace(" ", "")
-                            r, c = map(int, str_pos.split(","))
-                            number_cells[(r, c)] = num
-                        except:
-                            # 変換に失敗した場合はスキップ
-                            continue
-                    
-                    # 変換後のデータで置き換え
-                    puzzle_data["numbers"] = number_cells
-                    custom_puzzles.append(puzzle_data)
-            except:
-                # 読み込みエラーは無視
-                pass
-    
-    return custom_puzzles
+# パズルデータのディレクトリ
+DATA_DIR = os.path.join(os.path.dirname(__file__), "data")
 
-def get_all_puzzles():
-    """組み込みパズルとカスタムパズルを結合したリストを返す"""
-    # カスタムパズルをロード
-    custom_puzzles = load_custom_puzzles()
+
+def _parse_numbers(numbers_dict):
+    """座標文字列をタプルに変換"""
+    result = {}
+    for str_pos, num in numbers_dict.items():
+        # "r,c" 形式
+        parts = str_pos.split(",")
+        r, c = int(parts[0]), int(parts[1])
+        result[(r, c)] = num
+    return result
+
+
+def _load_all_puzzles():
+    """全パズルをロードしてキャッシュ"""
+    puzzles = []
     
-    # 組み込みパズルとカスタムパズルを結合
-    all_puzzles = PUZZLES.copy() + custom_puzzles
+    if not os.path.exists(DATA_DIR):
+        return puzzles
     
-    return all_puzzles
+    for filename in sorted(os.listdir(DATA_DIR)):
+        if not filename.endswith(".json"):
+            continue
+        
+        filepath = os.path.join(DATA_DIR, filename)
+        try:
+            with open(filepath, "r") as f:
+                puzzle_data = json.load(f)
+            
+            # 必要なフィールドの確認
+            if "id" not in puzzle_data or "size" not in puzzle_data or "numbers" not in puzzle_data:
+                continue
+            
+            # サイズの正規化 (int -> [int, int])
+            size = puzzle_data["size"]
+            if isinstance(size, int):
+                size = [size, size]
+            
+            puzzles.append({
+                "id": puzzle_data["id"],
+                "size": size,
+                "numbers": _parse_numbers(puzzle_data["numbers"])
+            })
+        except Exception as e:
+            print(f"Error loading {filename}: {e}")
+            continue
+    
+    return puzzles
+
+
+# モジュール読み込み時にキャッシュ
+_PUZZLE_CACHE = None
+
+
+def _get_puzzles():
+    """キャッシュされたパズルリストを取得"""
+    global _PUZZLE_CACHE
+    if _PUZZLE_CACHE is None:
+        _PUZZLE_CACHE = _load_all_puzzles()
+    return _PUZZLE_CACHE
+
 
 def get_puzzle_list():
-    """利用可能なパズルのリストを返す（カスタムパズルを含む）"""
-    all_puzzles = get_all_puzzles()
-    return [{"id": puzzle["id"], "name": puzzle["name"], "size": puzzle["size"]} for puzzle in all_puzzles]
+    """利用可能なパズルのリストを返す"""
+    puzzles = _get_puzzles()
+    return [{"id": p["id"], "size": p["size"]} for p in puzzles]
+
 
 def load_puzzle(puzzle_id):
-    """指定されたIDのパズルデータを読み込む（カスタムパズルを含む）"""
-    # すべてのパズルから検索
-    all_puzzles = get_all_puzzles()
-    for puzzle in all_puzzles:
+    """指定されたIDのパズルデータを読み込む"""
+    puzzles = _get_puzzles()
+    for puzzle in puzzles:
         if puzzle["id"] == puzzle_id:
             return puzzle
     return None

@@ -3,9 +3,10 @@ from utils.colors import GRAY, DARK_GRAY, WHITE, BLACK
 from utils.grid import is_adjacent
 
 class NumberlinkController:
-    def __init__(self, game, board):
+    def __init__(self, game, board, puzzle_id):
         self.game = game
         self.board = board
+        self.puzzle_id = puzzle_id
         
         # ゲーム状態の初期化
         self.initialize_game()
@@ -85,6 +86,9 @@ class NumberlinkController:
             self.is_cleared = self.board.check_win()
             # クリアしていなくても常にメッセージ表示（デバッグ用）
             self.show_clear_message = True
+            # クリアしていたら記録
+            if self.is_cleared:
+                self.game.app.mark_puzzle_cleared(self.puzzle_id)
         
         # メニューに戻る (MキーまたはYボタン)
         if (pyxel.btnp(pyxel.KEY_M) or 
@@ -98,11 +102,13 @@ class NumberlinkController:
         # クリアしている場合のみメッセージを表示
         if self.is_cleared:
             self.show_clear_message = True
+            # クリア済みとして記録
+            self.game.app.mark_puzzle_cleared(self.puzzle_id)
     
     def try_move_cursor(self, dx, dy):
         # グリッド内に収まるように座標を制限
-        new_row = max(0, min(self.board.GRID_SIZE - 1, self.cursor_pos[0] + dy))
-        new_col = max(0, min(self.board.GRID_SIZE - 1, self.cursor_pos[1] + dx))
+        new_row = max(0, min(self.board.GRID_ROWS - 1, self.cursor_pos[0] + dy))
+        new_col = max(0, min(self.board.GRID_COLS - 1, self.cursor_pos[1] + dx))
         
         new_pos = (new_row, new_col)
         old_pos = (self.cursor_pos[0], self.cursor_pos[1])
@@ -167,8 +173,8 @@ class NumberlinkController:
         return connected_numbers1 != connected_numbers2
     
     def move_cursor(self, dx, dy):
-        new_row = max(0, min(self.board.GRID_SIZE - 1, self.cursor_pos[0] + dy))
-        new_col = max(0, min(self.board.GRID_SIZE - 1, self.cursor_pos[1] + dx))
+        new_row = max(0, min(self.board.GRID_ROWS - 1, self.cursor_pos[0] + dy))
+        new_col = max(0, min(self.board.GRID_COLS - 1, self.cursor_pos[1] + dx))
         
         # 位置が変わる場合のみ処理
         if new_row != self.cursor_pos[0] or new_col != self.cursor_pos[1]:
@@ -188,6 +194,17 @@ class NumberlinkController:
             
             # カーソル位置を更新
             self.cursor_pos = [new_row, new_col]
+    
+    def _get_puzzle_display_info(self):
+        """パズルIDから表示用の情報を取得"""
+        # ID形式: "10x10_001" -> size="10x10", number="001"
+        parts = self.puzzle_id.split("_")
+        if len(parts) == 2:
+            size_part = parts[0]
+            num_part = parts[1]
+            return size_part, num_part
+        # フォールバック
+        return f"{self.board.GRID_ROWS}x{self.board.GRID_COLS}", "???"
     
     def draw(self):
         # カーソル描画
@@ -275,7 +292,7 @@ class NumberlinkController:
         # モード表示
         mode_text = "DRAW MODE" if self.draw_mode else "MOVE MODE"
         text_x = self.game.app.WINDOW_WIDTH // 2 - len(mode_text) * 2
-        text_y = self.board.OFFSET_Y + self.board.GRID_SIZE * self.board.CELL_SIZE + 10
+        text_y = self.board.OFFSET_Y + self.board.GRID_ROWS * self.board.CELL_SIZE + 10
         
         mode_color = 8 if self.draw_mode else 12
         pyxel.text(text_x, text_y, mode_text, mode_color)
@@ -286,15 +303,16 @@ class NumberlinkController:
         ctrl_y = text_y + 10
         pyxel.text(ctrl_x, ctrl_y, ctrl_text, GRAY)
         
-        # グリッドサイズ表示
-        size_text = f"Grid Size: {self.board.GRID_SIZE}x{self.board.GRID_SIZE}"
-        size_x = self.game.app.WINDOW_WIDTH // 2 - len(size_text) * 2
-        size_y = text_y + 20
-        pyxel.text(size_x, size_y, size_text, DARK_GRAY)
+        # パズル情報表示 (例: "10x10 No.001")
+        size_str, num_str = self._get_puzzle_display_info()
+        puzzle_text = f"{size_str} No.{num_str}"
+        puzzle_x = self.game.app.WINDOW_WIDTH // 2 - len(puzzle_text) * 2
+        puzzle_y = text_y + 20
+        pyxel.text(puzzle_x, puzzle_y, puzzle_text, DARK_GRAY)
     
     def draw_clear_message(self):
         # ステータスエリアの位置を取得（グリッド領域の下）
-        status_y = self.board.OFFSET_Y + self.board.GRID_SIZE * self.board.CELL_SIZE + 10
+        status_y = self.board.OFFSET_Y + self.board.GRID_ROWS * self.board.CELL_SIZE + 10
         
         # クリアメッセージ（通常サイズで表示）
         message = "CLEARED!"

@@ -14,8 +14,10 @@ class NumberlinkApp:
         # 音楽再生状態を管理するフラグ
         self.music_enabled = True
         
+        # クリア済みパズルのセット（ゲーム起動中のみ保持）
+        self.cleared_puzzles = set()
+        
         # Pyxelの初期化（マウス操作を有効化）
-        # pyxel.init(self.WINDOW_WIDTH, self.WINDOW_HEIGHT, title="Numberlink", fps=60, mouse=True)
         pyxel.init(self.WINDOW_WIDTH, self.WINDOW_HEIGHT, title="Numberlink", fps=60)
         
         # リソースファイルの読み込み
@@ -75,6 +77,14 @@ class NumberlinkApp:
         """マウスがBGMボタン上にあるかチェック"""
         return (self.btn_x <= pyxel.mouse_x <= self.btn_x + self.btn_width and 
                 self.btn_y <= pyxel.mouse_y <= self.btn_y + self.btn_height)
+    
+    def mark_puzzle_cleared(self, puzzle_id):
+        """パズルをクリア済みとしてマーク"""
+        self.cleared_puzzles.add(puzzle_id)
+    
+    def is_puzzle_cleared(self, puzzle_id):
+        """パズルがクリア済みかどうか確認"""
+        return puzzle_id in self.cleared_puzzles
     
     def start_game(self, puzzle_id):
         """指定されたパズルでゲームを開始する"""

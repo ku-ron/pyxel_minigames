@@ -4,6 +4,8 @@ lib/
 main/fan_attack/src/ignore/
 pyvenv.cfg
 setting.json
+main/numberlink/src/trash/
+main/numberlink/src/new_pazzles/
 .DS_Store
 */__pycache__/
 **/__pycache__/

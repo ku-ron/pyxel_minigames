@@ -14,17 +14,19 @@ class NumberlinkGame:
         
         # パズル情報の設定
         self.puzzle_id = puzzle_id
-        grid_size = puzzle_data["size"]
+        size = puzzle_data["size"]
+        grid_rows = size[0]
+        grid_cols = size[1]
         number_cells = puzzle_data["numbers"]
         
         # ゲーム設定 - セルサイズは固定
-        cell_size = 16  # 元のセルサイズに戻す
-        offset_x = (app.WINDOW_WIDTH - grid_size * cell_size) // 2
-        offset_y = (app.WINDOW_HEIGHT - 40 - grid_size * cell_size) // 2
+        cell_size = 16
+        offset_x = (app.WINDOW_WIDTH - grid_cols * cell_size) // 2
+        offset_y = (app.WINDOW_HEIGHT - 40 - grid_rows * cell_size) // 2
         
         # ボードとコントローラーの初期化
-        self.board = NumberlinkBoard(grid_size, number_cells, cell_size, offset_x, offset_y)
-        self.controller = NumberlinkController(self, self.board)
+        self.board = NumberlinkBoard(grid_rows, grid_cols, number_cells, cell_size, offset_x, offset_y)
+        self.controller = NumberlinkController(self, self.board, puzzle_id)
     
     def initialize_game(self):
         self.controller.initialize_game()
