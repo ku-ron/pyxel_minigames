@@ -4,6 +4,6 @@
 - 扇形攻撃ゲーム : [ブラウザで遊ぶ](https://kitao.github.io/pyxel/wasm/launcher/?play=ku-ron.pyxel_minigames.main.fan_attack.fan_attack)
     - Claudeを使って一文字も打たずに作りました。[詳しい説明](https://github.com/ku-ron/pyxel_minigames/blob/main/main/fan_attack/readme.md)
 
-- ナンバーリンク : [ブラウザで遊ぶ](https://kitao.github.io/pyxel/wasm/launcher/?play=ku-ron.pyxel_minigames.main.numberlink.numberlink_v2_0&gamepad=enabled)
+- ナンバーリンク : [ブラウザで遊ぶ](https://kitao.github.io/pyxel/wasm/launcher/?play=ku-ron.pyxel_minigames.main.numberlink.numberlink_v2_1&gamepad=enabled)
     - 同じ数字をつなぐパズルです。問題は中学生の頃に自作したもの…がメインだったのですが、その後自動生成プログラムを使って問題を増やしています。[詳しい説明](https://github.com/ku-ron/pyxel_minigames/blob/main/main/numberlink/readme.md)
     - これもClaudeを使って一文字も打たずに作りました。
