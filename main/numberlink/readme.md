@@ -6,7 +6,7 @@ Pyxelを使用したナンバーリンクパズルゲームです。同じ数字
 
 
 ## ブラウザ上での実行
-- こちらからプレイできます。[ブラウザで遊ぶ](https://kitao.github.io/pyxel/wasm/launcher/?play=ku-ron.pyxel_minigames.main.numberlink.numberlink_v2_1&gamepad=enabled)
+- こちらからプレイできます。[ブラウザで遊ぶ](https://kitao.github.io/pyxel/wasm/launcher/?play=ku-ron.pyxel_minigames.main.numberlink.numberlink_v2_2&gamepad=enabled)
 
 
 ## ゲームのルール
@@ -18,8 +18,8 @@ Pyxelを使用したナンバーリンクパズルゲームです。同じ数字
 - 5x5: 1問
 - 6x6: 12問
 - 8x8: 105問
-- 10x10: 49問
-- **合計: 177問**
+- 10x10: 82問
+- **合計: 200問**
 
 ## 操作方法
 
@@ -74,6 +74,9 @@ Pyxelを使用したナンバーリンクパズルゲームです。同じ数字
       ```
 
 ## 更新履歴
+
+### v2.2
+- 10x10パズル数を追加（177問 → 200問）
 
 ### v2.1
 - 10x10パズル数を追加（145問 → 177問）
