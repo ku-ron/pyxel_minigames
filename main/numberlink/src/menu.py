@@ -208,20 +208,25 @@ class MenuScreen:
         current_puzzles = current_group['puzzles']
         
         # キー入力による移動処理
-        if pyxel.btnp(pyxel.KEY_RIGHT) or pyxel.btnp(pyxel.GAMEPAD1_BUTTON_DPAD_RIGHT):
+        # hold=10 (長押し検出まで10フレーム), period=4 (長押し中は4フレームごとに入力)
+        if (pyxel.btnp(pyxel.KEY_RIGHT, 10, 4) or 
+            pyxel.btnp(pyxel.GAMEPAD1_BUTTON_DPAD_RIGHT, 10, 4)):
             # 右に移動（同じグループ内で）
             if self.selected_item_index < len(current_puzzles) - 1:
                 self.selected_item_index += 1
         
-        elif pyxel.btnp(pyxel.KEY_LEFT) or pyxel.btnp(pyxel.GAMEPAD1_BUTTON_DPAD_LEFT):
+        elif (pyxel.btnp(pyxel.KEY_LEFT, 10, 4) or 
+              pyxel.btnp(pyxel.GAMEPAD1_BUTTON_DPAD_LEFT, 10, 4)):
             # 左に移動（同じグループ内で）
             if self.selected_item_index > 0:
                 self.selected_item_index -= 1
         
-        elif pyxel.btnp(pyxel.KEY_DOWN) or pyxel.btnp(pyxel.GAMEPAD1_BUTTON_DPAD_DOWN):
+        elif (pyxel.btnp(pyxel.KEY_DOWN, 10, 4) or 
+              pyxel.btnp(pyxel.GAMEPAD1_BUTTON_DPAD_DOWN, 10, 4)):
             self._move_down()
         
-        elif pyxel.btnp(pyxel.KEY_UP) or pyxel.btnp(pyxel.GAMEPAD1_BUTTON_DPAD_UP):
+        elif (pyxel.btnp(pyxel.KEY_UP, 10, 4) or 
+              pyxel.btnp(pyxel.GAMEPAD1_BUTTON_DPAD_UP, 10, 4)):
             self._move_up()
         
         # スクロール位置を調整
