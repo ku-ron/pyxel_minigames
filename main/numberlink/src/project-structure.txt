@@ -1,13 +1,19 @@
-# Numberlink Puzzle v2.0 - プロジェクト構成
+# Numberlink Puzzle v2.4 - プロジェクト構成
 
 ## ディレクトリ構造
 
 ```
 numberlink/
 ├── readme.md                    # 説明書
-├── numberlink_v2_0.pyxapp       # リリース版アーカイブ
+├── numberlink_v2_4.pyxapp       # リリース版アーカイブ
 ├── old_version_app/             # 過去バージョンのアーカイブ
-└── src/                         # ソースコード
+├── tools/                       # 開発用ツール（pyxappには含めない）
+│   ├── numberlink_sat_checker.py    # 唯一解・全マス使用のチェック
+│   ├── numberlink_difficulty.py     # 難易度指標の算出
+│   └── numberlink_analyze_folder.py # フォルダ一括分析 → Excel出力
+├── analysis/                    # 分析結果の出力先（git管理外）
+├── trash/                       # 旧データ置き場（git管理外）
+└── src/                         # ソースコード（この中身がpyxappになる）
     ├── main.py                  # メインエントリーポイント
     ├── menu.py                  # メニュー画面（スクロール対応）
     ├── game.py                  # ゲーム画面の統合管理
@@ -19,29 +25,45 @@ numberlink/
     ├── puzzles/                 # パズル関連
     │   ├── __init__.py
     │   ├── puzzle_loader.py     # JSONパズル読み込み
-    │   └── data/                # パズルデータ (JSON)
-    │       ├── 05x05_001.json   # 5x5: 1問
-    │       ├── 06x06_001.json   # 6x6: 12問 (001-012)
-    │       ├── 08x08_001.json   # 8x8: 105問 (001-105)
-    │       └── 10x10_001.json   # 10x10: 27問 (001-027)
+    │   └── data/                # パズルデータ (JSON) 544ファイル
+    │       ├── 05x05_001.json         # 手作り: ファイル名に接頭辞なし
+    │       ├── 06x06_001.json
+    │       ├── 08x08_001.json
+    │       ├── 10x10_001.json
+    │       ├── puzzle_15x15_002.json
+    │       └── puzzle_10x10_A01.json  # 自動生成: puzzle_ + A/B/C + 連番
     └── utils/                   # ユーティリティ
         ├── __init__.py
         ├── colors.py            # 色の管理
         └── grid.py              # グリッド描画・隣接判定
 ```
 
+注意: `pyxel package` は `src/` 以下を丸ごとzipに詰め、.gitignore を見ない。
+開発用のスクリプトや分析データを `src/` に置くと、そのままリリース版に同梱されてしまう。
+`src/` にはゲームの実行に必要なものだけを置くこと。
+
 ## パズル数
 - 5x5: 1問
 - 6x6: 12問
 - 8x8: 105問
-- 10x10: 27問
-- **合計: 145問**
+- 10x10: 173問（手作り 113 + 自動生成 A/B/C 各20）
+- 12x12: 60問（自動生成 A/B/C 各20）
+- 15x15: 190問（手作り 10 + 自動生成 A/B/C 各60）
+- 15x20: 3問（自動生成 A/B/C 各1）
+- **合計: 544問**
+
+自動生成問題の A/B/C は暫定の難易度グループ。
+- A: 外周に数字あり・数字同士の隣接あり
+- B: 外周に数字あり・隣接なし
+- C: 外周に数字なし・隣接なし
 
 ## ファイルの役割
 
 ### main.py
 アプリケーションのメインエントリーポイント。
 - Pyxelの初期化とメインループ
+- ウィンドウサイズを収録パズルの最大盤面から自動決定
+  （起動時に全パズルを走査。15x20 があるので 400x320）
 - BGM管理（再生/停止/切り替え）
 - クリア済みパズルの記録（セッション中のみ）
 - 画面遷移の管理
@@ -49,7 +71,7 @@ numberlink/
 ### menu.py
 メニュー画面。
 - パズルをサイズごとにグループ化して表示
-- スクロール機能（上下キーで自動スクロール）
+- スクロール機能（上下キーで自動スクロール、長押しで高速移動）
 - クリア済みパズルの表示（緑色 + *マーク）
 - キーボード/ゲームパッド両対応
 
@@ -63,6 +85,7 @@ numberlink/
 ゲームの操作ロジック。
 - カーソル移動（移動モード/描画モード）
 - 線の描画・削除操作
+- カーソルが乗っている数字の両端を点滅する点線枠で強調（つながったら消える）
 - 無効な操作のアニメーション表示
 - クリア判定と記録
 
@@ -71,7 +94,7 @@ numberlink/
 - 数字セルとパス（線）の管理
 - 数字間の接続状態の追跡
 - クリア条件の判定
-- グリッド・パス・数字の描画
+- グリッド・パス・数字の描画（数字は桁数に応じて中央寄せ）
 
 ### puzzles/puzzle_loader.py
 JSONパズルファイルの読み込み。
@@ -96,30 +119,48 @@ JSONパズルファイルの読み込み。
 
 ### import_new_puzzles.py
 新しいパズルをインポートするツール。
-- `new_pazzles/` フォルダからパズルを読み込み
+- `src/new_pazzles/` フォルダからパズルを読み込み（無ければ自分で作る）
 - フォーマット変換とID付与
 - 連番の自動割り当て
 
-## v2.0 での主な変更点（v1.x からの変更）
+## tools/ の使い方
 
-1. **パズルデータの統一**
-   - Python埋め込み形式からJSON形式に完全移行
-   - サイズ形式を `[rows, cols]` に変更（非正方形対応準備）
+`src/` の外にあるので pyxapp には含まれない。venv から実行する。
+`numberlink_sat_checker.py` は `pip install python-sat`、
+`numberlink_analyze_folder.py` は `pip install openpyxl` が必要。
 
-2. **メニュー画面の改善**
-   - スクロール機能追加（多数のパズルに対応）
-   - グループラベルが必ず見えるスクロール制御
+```bash
+cd tools
 
-3. **クリア済み表示機能**
-   - クリアしたパズルは緑色 + `*` で表示
-   - セッション中のみ保持
+# 唯一解・全マス使用のチェック
+python numberlink_sat_checker.py ../src/puzzles/data/puzzle_10x10_A01.json
 
-4. **ファイル命名規則の統一**
-   - `{rows}x{cols}_{3桁番号}.json` 形式
-   - ファイル名ソートで自動整列
+# 難易度指標の算出
+python numberlink_difficulty.py ../src/puzzles/data/puzzle_10x10_A01.json -v
 
-5. **パズル数の大幅増加**
-   - v1.x: 約36問 → v2.0: 145問
+# フォルダ一括分析（出力先は ../analysis/difficulty_analysis.xlsx）
+python numberlink_analyze_folder.py ../src/puzzles/data
+```
+
+## バージョンごとの主な変更点
+
+### v2.4
+- 自動生成の 10x10 / 12x12 / 15x15 / 15x20 を追加（231問 → 544問）
+- ウィンドウサイズを収録パズルの最大盤面に合わせて自動調整
+- カーソルが乗っている数字の両端を点線枠で点滅表示
+- 数字の表示位置を中央に修正
+- 開発用スクリプトを `src/` から `tools/` へ移動（pyxappの肥大化を解消）
+
+### v2.3
+- 10x10パズルを追加（200問 → 231問）
+- 問題選択のカーソルを長押しで高速移動
+
+### v2.0
+- パズルデータをPython埋め込みからJSON形式に完全移行
+- サイズ形式を `[rows, cols]` に変更（非正方形対応）
+- メニュー画面にスクロール機能を追加
+- クリア済み表示機能（緑色 + `*`、セッション中のみ）
+- ファイル命名規則を `{rows}x{cols}_{3桁番号}.json` に統一
 
 ## 実行方法
 
@@ -128,11 +169,31 @@ cd src
 python main.py
 ```
 
+pyxappから実行する場合:
+```bash
+pyxel play numberlink_v2_4.pyxapp
+```
+
 ## 新しいパズルの追加方法
 
-1. `new_pazzles/` フォルダにJSONファイルを配置
+1. `src/new_pazzles/` フォルダを作り、JSONファイルを配置
 2. インポートスクリプトを実行:
    ```bash
+   cd src
    python import_new_puzzles.py
    ```
 3. 連番が自動で振られ `puzzles/data/` に追加される
+4. 作業が終わったら `src/new_pazzles/` を消す（残すとpyxappに入る）
+
+## リリース手順
+
+```bash
+cd main/numberlink
+pyxel package src src/main.py      # src.pyxapp が出来る
+mv src.pyxapp numberlink_v2_X.pyxapp
+```
+
+パッケージ前に `src/` に余計なものが無いか確認すること:
+```bash
+unzip -l numberlink_v2_X.pyxapp | grep -iE "xlsx|trash|__pycache__|DS_Store"
+```

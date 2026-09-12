@@ -379,6 +379,8 @@ class NumberlinkBoard:
                 pyxel.circ(center_x, center_y, radius - 1, WHITE)
             
             # 数字を描画（中央に配置）
-            x = center_x - 2
+            # 内蔵フォントは1文字3px幅+1px間隔なので、文字列幅 = 4*桁数-1
+            text = str(number)
+            x = center_x - (4 * len(text) - 1) // 2
             y = center_y - 2
-            pyxel.text(x, y, str(number), base_color)
+            pyxel.text(x, y, text, base_color)

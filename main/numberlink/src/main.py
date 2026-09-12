@@ -1,15 +1,19 @@
 import pyxel
 from menu import MenuScreen
 from game import NumberlinkGame
+from puzzles.puzzle_loader import get_puzzle_list
 
 class NumberlinkApp:
     def __init__(self):
-        # ウィンドウサイズの設定 - 10x10のグリッドを収めるサイズに調整
-        # 10x10グリッド + 余白のために必要なサイズを計算
-        # セルサイズ16px x 10マス = 160px + 左右の余白
-        # UI領域の高さも考慮
-        self.WINDOW_WIDTH = 240  # 160px + 左右40px余白
-        self.WINDOW_HEIGHT = 240  # 160px + 上下40px余白 + UI領域40px
+        # ウィンドウサイズの設定 - 収録パズルのうち最大の盤面が収まるサイズにする
+        # セルサイズ16px x マス数 + 左右の余白40px / 上下の余白40px + UI領域40px
+        # （10x10 までなら従来どおり 240x240）
+        max_rows, max_cols = 10, 10
+        for p in get_puzzle_list():
+            max_rows = max(max_rows, p["size"][0])
+            max_cols = max(max_cols, p["size"][1])
+        self.WINDOW_WIDTH = max_cols * 16 + 80
+        self.WINDOW_HEIGHT = max_rows * 16 + 80
         
         # 音楽再生状態を管理するフラグ
         self.music_enabled = True

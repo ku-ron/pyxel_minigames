@@ -4,10 +4,15 @@ lib/
 main/fan_attack/src/ignore/
 pyvenv.cfg
 setting.json
-main/numberlink/src/trash/
-main/numberlink/src/new_pazzles/
 main/numberlink/trash/
+main/numberlink/analysis/
 .DS_Store
 */__pycache__/
 **/__pycache__/
 **/ignore/
+
+# Excel の一時ロックファイル
+~$*
+
+# 分析データ（アップロードしない）
+*.xlsx

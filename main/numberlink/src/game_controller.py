@@ -1,5 +1,5 @@
 import pyxel
-from utils.colors import GRAY, DARK_GRAY, WHITE, BLACK
+from utils.colors import GRAY, DARK_GRAY, WHITE, BLACK, get_color_for_number
 from utils.grid import is_adjacent
 
 class NumberlinkController:
@@ -206,7 +206,50 @@ class NumberlinkController:
         # フォールバック
         return f"{self.board.GRID_ROWS}x{self.board.GRID_COLS}", "???"
     
+    def get_active_number(self):
+        """カーソルが乗っている数字（数字マス、またはその数字につながった線の上）を返す。なければ None"""
+        pos = (self.cursor_pos[0], self.cursor_pos[1])
+        if pos in self.board.number_cells:
+            return self.board.number_cells[pos]
+        nums = self.board.connected_numbers.get(pos, set())
+        if len(nums) == 1:
+            return next(iter(nums))
+        return None
+
+    def draw_target_highlight(self):
+        """カーソルが乗っている数字の両端を、その数字の色で点滅する枠で強調する"""
+        num = self.get_active_number()
+        if num is None:
+            return
+        # 両端がすでにつながっている数字は強調しない
+        same_number_positions = [p for p, n in self.board.number_cells.items() if n == num]
+        if self.board.are_connected(same_number_positions, num):
+            return
+        color = get_color_for_number(num)
+        cell = self.board.CELL_SIZE
+        # 格子の点線の 1px 内側に 1px の枠を、60フレーム周期（1秒）で表示/非表示
+        if (pyxel.frame_count // 30) % 2:
+            return
+        for pos in same_number_positions:
+            r, c = pos
+            x1 = self.board.OFFSET_X + c * cell + 1
+            y1 = self.board.OFFSET_Y + r * cell + 1
+            x2 = x1 + cell - 2
+            y2 = y1 + cell - 2
+            # 点線の枠: 枠の周上の点のうち (x+y) が偶数のものだけ打つ（1px おき）
+            for px in range(x1, x2 + 1):
+                for py in (y1, y2):
+                    if (px + py) % 2 == 0:
+                        pyxel.pset(px, py, color)
+            for py in range(y1 + 1, y2):
+                for px in (x1, x2):
+                    if (px + py) % 2 == 0:
+                        pyxel.pset(px, py, color)
+
     def draw(self):
+        # 目標の数字の強調（カーソルより下に描く）
+        self.draw_target_highlight()
+
         # カーソル描画
         self.draw_cursor()
         

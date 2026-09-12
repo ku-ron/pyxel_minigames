@@ -6,7 +6,7 @@ Pyxelを使用したナンバーリンクパズルゲームです。同じ数字
 
 
 ## ブラウザ上での実行
-- こちらからプレイできます。[ブラウザで遊ぶ](https://kitao.github.io/pyxel/wasm/launcher/?play=ku-ron.pyxel_minigames.main.numberlink.numberlink_v2_3&gamepad=enabled)
+- こちらからプレイできます。[ブラウザで遊ぶ](https://kitao.github.io/pyxel/wasm/launcher/?play=ku-ron.pyxel_minigames.main.numberlink.numberlink_v2_4&gamepad=enabled)
 
 
 ## ゲームのルール
@@ -18,8 +18,14 @@ Pyxelを使用したナンバーリンクパズルゲームです。同じ数字
 - 5x5: 1問
 - 6x6: 12問
 - 8x8: 105問
-- 10x10: 82問
-- **合計: 200問**
+- 10x10: 173問
+- 12x12: 60問
+- 15x15: 190問
+- 15x20: 3問
+- **合計: 544問**
+
+10x10 以上の `A`/`B`/`C` が付いた問題は自動生成です（唯一解・全マス使用を確認済み）。
+暫定の難易度グループで、A: 外周に数字あり・数字同士の隣接あり、B: 外周に数字あり・隣接なし、C: 外周に数字なし・隣接なし。
 
 ## 操作方法
 
@@ -70,10 +76,16 @@ Pyxelを使用したナンバーリンクパズルゲームです。同じ数字
       ```
    - pyxappから実行する場合
       ```
-      pyxel play numberlink_v2_0.pyxapp
+      pyxel play numberlink_v2_4.pyxapp
       ```
 
 ## 更新履歴
+
+### v2.4
+- 自動生成の 10x10 / 12x12 / 15x15 / 15x20 パズルを追加（231問 → 544問）
+- ウィンドウサイズを収録パズルの最大盤面に合わせて自動調整（15x15 以上に対応）
+- カーソルが乗っている数字の両端を点線の枠で点滅表示（両端がつながったら消える）
+- 数字の表示位置を中央に修正
 
 ### v2.3
 - 10x10パズル数を追加（200問 → 231問）
