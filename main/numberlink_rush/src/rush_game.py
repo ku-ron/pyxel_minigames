@@ -62,8 +62,7 @@ class RushGame:
         self.invalid_move_target = None
 
     def reset_puzzle(self):
-        self.board.paths = {}
-        self.board.connected_numbers = {pos: {num} for pos, num in self.board.number_cells.items()}
+        self.board.reset()
         self.reset_cursor()
 
     # ──────────────────────────────────────
@@ -257,9 +256,9 @@ class RushGame:
         num = self.get_active_number()
         if num is None:
             return
-        positions = [p for p, n in self.board.number_cells.items() if n == num]
-        if self.board.are_connected(positions, num):
+        if self.board.is_number_completed(num):
             return
+        positions = self.board.cells_by_number[num]
         if (pyxel.frame_count // 30) % 2:
             return
         color = get_color_for_number(num)

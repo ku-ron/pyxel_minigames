@@ -3,7 +3,7 @@
 Pyxel で作ったナンバーリンクのタイムアタックです。5 分間で何問解けるかを競います。
 
 ## ブラウザ上での実行
-- こちらからプレイできます。[ブラウザで遊ぶ](https://kitao.github.io/pyxel/wasm/launcher/?play=ku-ron.pyxel_minigames.main.numberlink_rush.numberlink_rush_v1_0&gamepad=enabled)
+- こちらからプレイできます。[ブラウザで遊ぶ](https://kitao.github.io/pyxel/wasm/launcher/?play=ku-ron.pyxel_minigames.main.numberlink_rush.numberlink_rush_v1_1&gamepad=enabled)
 
 ## ルール
 
@@ -80,7 +80,7 @@ python main.py
 ```
 または
 ```
-pyxel play numberlink_rush_v1_0.pyxapp
+pyxel play numberlink_rush_v1_1.pyxapp
 ```
 
 動作確認は Pyxel 2.9.9 で行っています（MML の BGM は Pyxel 2.4 以降の文法。古い Pyxel では自動で旧文法に変換して鳴らします）。
@@ -90,3 +90,11 @@ pyxel play numberlink_rush_v1_0.pyxapp
 ## 問題の追加
 
 問題は別リポジトリの生成器（`numberlink_hard_generate.py`）で作り、`build_pool.py` で `data/pool_X.json` にまとめています。
+
+## 更新履歴
+
+### v1.1
+- 線を引くほど動作が重くなる問題を修正（本編 v2.5 と同じ修正。接続状態を毎フレーム再計算していたのを、線の変更時だけ計算するように変更。10x10 全線で描画処理 4.8ms → 0.1ms）
+
+### v1.0
+- 初版

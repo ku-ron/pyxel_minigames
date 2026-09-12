@@ -77,8 +77,7 @@ class NumberlinkController:
         if (pyxel.btnp(pyxel.KEY_R) or 
             pyxel.btnp(pyxel.GAMEPAD1_BUTTON_X)):
             self.initialize_game()
-            self.board.paths = {}
-            self.board.connected_numbers = {pos: {num} for pos, num in self.board.number_cells.items()}
+            self.board.reset()
         
         # クリアチェック (Cキー) - 手動チェック用に残しておく
         if pyxel.btnp(pyxel.KEY_C):
@@ -222,9 +221,9 @@ class NumberlinkController:
         if num is None:
             return
         # 両端がすでにつながっている数字は強調しない
-        same_number_positions = [p for p, n in self.board.number_cells.items() if n == num]
-        if self.board.are_connected(same_number_positions, num):
+        if self.board.is_number_completed(num):
             return
+        same_number_positions = self.board.cells_by_number[num]
         color = get_color_for_number(num)
         cell = self.board.CELL_SIZE
         # 格子の点線の 1px 内側に 1px の枠を、60フレーム周期（1秒）で表示/非表示

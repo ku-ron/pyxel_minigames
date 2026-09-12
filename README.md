@@ -8,6 +8,6 @@
     - 同じ数字をつなぐパズルです。問題は中学生の頃に自作したもの…がメインだったのですが、その後自動生成プログラムを使って問題を増やしています。[詳しい説明](https://github.com/ku-ron/pyxel_minigames/blob/main/main/numberlink/readme.md)
     - これもClaudeを使って一文字も打たずに作りました。
 
-- ナンバーリンク・ラッシュ : [ブラウザで遊ぶ](https://kitao.github.io/pyxel/wasm/launcher/?play=ku-ron.pyxel_minigames.main.numberlink_rush.numberlink_rush_v1_0&gamepad=enabled)
+- ナンバーリンク・ラッシュ : [ブラウザで遊ぶ](https://kitao.github.io/pyxel/wasm/launcher/?play=ku-ron.pyxel_minigames.main.numberlink_rush.numberlink_rush_v1_1&gamepad=enabled)
     - 5分間で何問解けるかを競うタイムアタック版。問題は自動生成した10x10（難易度3段階、約100問ずつ）を同梱。BGMはMMLで自作。[詳しい説明](https://github.com/ku-ron/pyxel_minigames/blob/main/main/numberlink_rush/readme.md)
     - これもClaudeを使って作りました。
